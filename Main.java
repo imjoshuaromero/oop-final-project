@@ -147,10 +147,10 @@ public class Main {
 
 
         System.out.println("\nCategories:");
-        System.out.println("[1] Academic");
-        System.out.println("[2] Financial");
-        System.out.println("[3] Facilities");
-        System.out.println("[4] Discipline");
+        System.out.println("[1] Academic / Akademiko");
+        System.out.println("[2] Administrative Decisions / Desisyong Administratibo");
+        System.out.println("[3] Service and Facilities / Serbisyo at Pasilidad");
+        System.out.println("[4] Harrassment / Panghaharas");
         System.out.println("[5] Others");
         System.out.print("Choose category (1-5): ");
         int cat = sc.nextInt();
@@ -160,16 +160,16 @@ public class Main {
         String category;
         switch (cat) {
             case 1:
-                category = "Academic";
+                category = "Academic / Akademiko";
                 break;
             case 2:
-                category = "Financial";
+                category = "Administrative Decisions / Desisyong Administratibo";
                 break;
             case 3:
-                category = "Facilities";
+                category = "Service and Facilities / Serbisyo at Pasilidad";
                 break;
             case 4:
-                category = "Discipline";
+                category = "Harrassment / Panghaharas";
                 break;
             default:
                 category = "Others";
@@ -179,7 +179,7 @@ public class Main {
 
         System.out.print("Enter Concern Title: ");
         String title = sc.nextLine().trim();
-        System.out.print("Describe your concern: ");
+        System.out.print("Describe your concern (Magbigay ng maikling paglalarawan tungkol sa iyong pangunahing concern o reklamo.: ");
         String desc = sc.nextLine().trim();
 
 
