@@ -1,41 +1,41 @@
 public class Grievance {
-    private static int nextId = 1;
-    private int grievanceId;
-    private String studentSR;
+    private static int nextId = 1; //only code inside the class, shared by all grievance objects
+    private int grievanceId; //stores unique id 
+    private String studentSR; 
     private String title;
-    private String category;
-    private String description;
-    private String status;
-    private String feedback;
+    private String category; //what type of concern
+    private String description; //full details
+    private String status; //current state
+    private String feedback; //admins response
 
 
-    public Grievance(String studentSR, String title, String category, String description) {
-        this.studentSR = studentSR;
+    public Grievance(String studentSR, String title, String category, String description) { //Constructor,  requires 4 details
+        this.studentSR = studentSR; //stores the provided information into objects
         this.title = title;
         this.category = category;
         this.description = description;
-        this.status = "Submitted";
-        this.feedback = "None";
-        this.grievanceId = nextId++;
+        this.status = "Submitted"; //sets as default
+        this.feedback = "None"; //sets as default when first filed
+        this.grievanceId = nextId++; //assigns current value then increase nextID so the next grievance gets the next number
     }
 
-
-    public int getId() {
+    //GETTER
+    public int getId() { //returns the grievance id
         return grievanceId;
     }
 
 
-    public String getStudentSR() {
+    public String getStudentSR() { //returns the sr-code of who submitted it
         return studentSR;
     }
 
-
-    public void setStatus(String newStatus) {
+    //SETTER
+    public void setStatus(String newStatus) { //updates status
         this.status = newStatus;
     }
 
 
-    public void setFeedback(String feedback) {
+    public void setFeedback(String feedback) { //updates feedback
         this.feedback = feedback;
     }
 
@@ -48,5 +48,6 @@ public class Grievance {
         System.out.println("Description: " + description);
         System.out.println("Status: " + status);
         System.out.println("Feedback: " + feedback);
-    }
+    } //readable or clear format
 }
+

@@ -1,28 +1,25 @@
-import java.util.Scanner;
-
+import java.util.Scanner; //allows user input
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
-    static Student[] students = new Student[10];
+    static Scanner sc = new Scanner(System.in); //  (static)can be called without creating main, belongs to itself
+    static Student[] students = new Student[10];  // (void) performs process but does not return any value
     static Grievance[] grievances = new Grievance[50];
-    static int studentCount = 0;
-    static int grievanceCount = 0;
-
+    static int studentCount = 0; //allow up to 10
+    static int grievanceCount = 0; //allow up to 50
 
     public static void main(String[] args) {
-        int choice;
-        do {
-            System.out.println("\n===== GRIEVANCE REPORTING AND TRACKING SYSTEM =====");
+        int choice; 
+        do { //menu keeps repeating until the user chooses exit
+            System.out.println("\n===== GRIEVANCE REPORTING AND TRACKING SYSTEM ====="); //display menu
             System.out.println("[1] Student Login");
             System.out.println("[2] Register Student");
             System.out.println("[3] Admin Login");
             System.out.println("[4] Exit");
             System.out.print("Enter choice: ");
-            choice = sc.nextInt();
+            choice = sc.nextInt(); //reads user input
             sc.nextLine();
 
-
-            switch (choice) {
+            switch (choice) { //runs different actions depends on user choose
                 case 1:
                     studentLogin();
                     break;
@@ -41,20 +38,17 @@ public class Main {
         } while (choice != 4);
     }
 
-
     // STUDENT REGISTRATION
-    static void registerStudent() {
-        if (studentCount >= students.length) {
+    static void registerStudent() { //register new student
+        if (studentCount >= students.length) { //prevents adding more student than allowed
             System.out.println("Student storage full!");
             return;
         }
 
-
         System.out.print("\nEnter SR-Code (format ##-#####): ");
-        String srCode = sc.nextLine().trim();
+        String srCode = sc.nextLine().trim(); //reads sr-code
 
-
-        if (!srCode.matches("\\d{2}-\\d{5}")) {
+        if (!srCode.matches("\\d{2}-\\d{5}")) { //format 2 digits - 5 digits
             System.out.println("Invalid SR-Code format. Must be ##-#####.");
             return;
         }
@@ -67,7 +61,6 @@ public class Main {
             }
         }
 
-
         System.out.print("Enter Full Name: ");
         String name = sc.nextLine().trim();
         System.out.print("Enter Email: ");
@@ -75,23 +68,21 @@ public class Main {
         System.out.print("Create Password: ");
         String password = sc.nextLine().trim();
 
-
-        students[studentCount] = new Student(srCode, name, password);
-        studentCount++;
+        students[studentCount] = new Student(srCode, name, password);//stores in array
+        studentCount++; // increases the counter
         System.out.println("Registration successful! You can now log in.");
     }
 
 
     // STUDENT LOGIN
-    static void studentLogin() {
+    static void studentLogin() { //allows student to log in
         System.out.print("Enter SR Code: ");
         String sr = sc.nextLine().trim();
         System.out.print("Enter Password: ");
         String pw = sc.nextLine().trim();
 
-
         Student loggedIn = null;
-        for (int i = 0; i < studentCount; i++) {
+        for (int i = 0; i < studentCount; i++) { //searches for matching aaccount inside the student array
             if (students[i] != null && students[i].getSrCode().equals(sr) && students[i].getPassword().equals(pw)) {
                 loggedIn = students[i];
                 break;
@@ -106,9 +97,8 @@ public class Main {
         }
     }
 
-
     // STUDENT DASHBOARD
-    static void studentMenu(Student s) {
+    static void studentMenu(Student s) { //student menu
         int choice;
         do {
             System.out.println("\n===== STUDENT DASHBOARD =====");
@@ -119,7 +109,6 @@ public class Main {
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
             sc.nextLine();
-
 
             switch (choice) {
                 case 1:
@@ -137,14 +126,12 @@ public class Main {
         } while (choice != 3);
     }
 
-
     // FILE CONCERN
-    static void fileConcern(Student s) {
+    static void fileConcern(Student s) { //alows to file a concern
         if (grievanceCount >= grievances.length) {
             System.out.println("Grievance storage full!");
             return;
         }
-
 
         System.out.println("\nCategories:");
         System.out.println("[1] Academic / Akademiko");
@@ -156,9 +143,8 @@ public class Main {
         int cat = sc.nextInt();
         sc.nextLine();
 
-
         String category;
-        switch (cat) {
+        switch (cat) { //converts number 1-5 into category text
             case 1:
                 category = "Academic / Akademiko";
                 break;
@@ -176,22 +162,20 @@ public class Main {
                 break;
         }
 
-
         System.out.print("Enter Concern Title: ");
         String title = sc.nextLine().trim();
         System.out.print("Describe your concern (Magbigay ng maikling paglalarawan tungkol sa iyong pangunahing concern o reklamo.: ");
         String desc = sc.nextLine().trim();
 
-
         // assign then increment to keep consistency
-        grievances[grievanceCount] = new Grievance(s.getSrCode(), title, category, desc);
+        grievances[grievanceCount] = new Grievance(s.getSrCode(), title, category, desc); //stores the grievance and increment count    
         grievanceCount++;
         System.out.println("Concern submitted successfully!");
     }
 
 
     // VIEW STUDENT'S CONCERNS
-    static void viewMyConcerns(Student s) {
+    static void viewMyConcerns(Student s) { //searches all grievance and display only those matching sr-codes
         boolean found = false;
         for (int i = 0; i < grievanceCount; i++) {
             if (grievances[i] != null && grievances[i].getStudentSR().equals(s.getSrCode())) {
@@ -204,14 +188,14 @@ public class Main {
 
 
     // ADMIN LOGIN
-    static void adminLogin() {
+    static void adminLogin() { //allows admin to log in
         System.out.print("Enter admin username: ");
         String user = sc.nextLine().trim();
         System.out.print("Enter password: ");
         String pass = sc.nextLine().trim();
 
 
-        if (user.equals("admin") && pass.equals("admin")) {
+        if (user.equals("admin") && pass.equals("admin")) { //hardcoded as admin
             Admin admin = new Admin();
             adminMenu(admin);
         } else {
@@ -219,9 +203,8 @@ public class Main {
         }
     }
 
-
     // ADMIN DASHBOARD
-    static void adminMenu(Admin admin) {
+    static void adminMenu(Admin admin) { //admin can choose from the menu
         int choice;
         do {
             System.out.println("\n===== ADMIN DASHBOARD =====");
@@ -231,7 +214,6 @@ public class Main {
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
             sc.nextLine();
-
 
             switch (choice) {
                 case 1:
