@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 // Admin class, nag-extend din ng User para ma-inherit yung properties
 public class Admin extends User {
@@ -25,37 +26,37 @@ public class Admin extends User {
     }
 
     // para makita lahat ng concerns na na-submit
-    void viewAllConcerns(Grievance[] gList, int count) {
+    void viewAllConcerns(ArrayList<Grievance> gList) {
         // check muna kung may mga concerns na
-        if (count == 0) {
+        if (gList.isEmpty()) {
             System.out.println("No concerns submitted yet.");
             return;
         }
         // i-loop lahat ng concerns at i-display
-        for (int i = 0; i < count; i++) {
-            gList[i].display();
+        for (Grievance grievance : gList) {
+            grievance.display();
         }
     }
 
     // para mag-update ng status at feedback ng concern
-    void updateConcern(Grievance[] gList, int count) {
+    void updateConcern(ArrayList<Grievance> gList) {
         // kunin yung ID ng concern na i-uupdate
         System.out.print("Enter Grievance ID to update: ");
         int id = sc.nextInt();
         sc.nextLine();  // para ma-clear yung input buffer
 
         // hanapin yung concern na may matching ID
-        for (int i = 0; i < count; i++) {
-            if (gList[i].getId() == id) {
+        for (Grievance grievance : gList) {
+            if (grievance.getId() == id) {
                 // kunin yung bagong status
                 System.out.print("Enter new status (Under Review / In Progress / Resolved): ");
                 String status = sc.nextLine();
-                gList[i].setStatus(status);  // i-update yung status
+                grievance.setStatus(status);  // i-update yung status
 
                 // kunin naman yung feedback
                 System.out.print("Enter feedback from officer: ");
                 String feedback = sc.nextLine();
-                gList[i].setFeedback(feedback);  // i-update yung feedback
+                grievance.setFeedback(feedback);  // i-update yung feedback
 
                 System.out.println("Concern updated successfully!");
                 return;  // tapos na, lumabas na sa method
