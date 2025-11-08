@@ -70,9 +70,9 @@ public class Main {
 
         System.out.print("Enter Full Name: ");
         String name = sc.nextLine().trim();
-        System.out.print("Enter Email: ");
+        System.out.print("Enter Email: "); //dapat may @g.batstate-u.edu.ph
         String email = sc.nextLine().trim();
-        System.out.print("Create Password: ");
+        System.out.print("Create Password: "); // change into ***
         String password = sc.nextLine().trim();
 
 
@@ -86,7 +86,7 @@ public class Main {
     static void studentLogin() {
         System.out.print("Enter SR Code: ");
         String sr = sc.nextLine().trim();
-        System.out.print("Enter Password: ");
+        System.out.print("Enter Password: "); //change into ****
         String pw = sc.nextLine().trim();
 
 
@@ -207,11 +207,11 @@ public class Main {
     static void adminLogin() {
         System.out.print("Enter admin username: ");
         String user = sc.nextLine().trim();
-        System.out.print("Enter password: ");
+        System.out.print("Enter password: "); // lalagyan ng ****
         String pass = sc.nextLine().trim();
 
 
-        if (user.equals("admin") && pass.equals("admin")) {
+        if (user.equals("admin") && pass.equals("admin")) { //hardcoded as admin
             Admin admin = new Admin();
             adminMenu(admin);
         } else {
