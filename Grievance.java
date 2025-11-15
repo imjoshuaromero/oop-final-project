@@ -1,6 +1,6 @@
 // class para sa mga grievance/concern ng students
 public class Grievance {
-    // static kaya shared ng lahat, para sa auto-increment ng ID
+    // static kaya shared ng lahat, para sa auto-increment ng id
     private static int nextId = 1;
     
     // private yung mga properties para sa encapsulation
@@ -14,23 +14,48 @@ public class Grievance {
 
     // constructor para gumawa ng bagong grievance
     public Grievance(String studentSR, String title, String category, String description) {
-        this.studentSR = studentSR;  // SR code ng student na nag-file
+        this.studentSR = studentSR;  // sr code ng student na nag-file
         this.title = title;  // title ng concern
         this.category = category;  // category ng concern
         this.description = description;  // detalye ng concern
-        this.status = "Submitted";  // default status ay "Submitted"
+        this.status = "Submitted";  // default status ay "submitted"
         this.feedback = "None";  // wala pang feedback sa simula
-        this.grievanceId = nextId++;  // bigyan ng ID tapos i-increment para sa next
+        this.grievanceId = nextId++;  // bigyan ng id tapos i-increment para sa next
     }
 
-    // getter para makuha yung ID ng grievance
+    // getter para makuha yung id ng grievance
     public int getId() {
         return grievanceId;
     }
 
-    // para makuha yung SR code ng student
+    // para makuha yung sr code ng student
     public String getStudentSR() {
         return studentSR;
+    }
+
+    // getter para title
+    public String getTitle() {
+        return title;
+    }
+
+    // getter para category
+    public String getCategory() {
+        return category;
+    }
+
+    // getter para description
+    public String getDescription() {
+        return description;
+    }
+
+    // getter para status
+    public String getStatus() {
+        return status;
+    }
+
+    // getter para feedback
+    public String getFeedback() {
+        return feedback;
     }
 
     // setter para i-update yung status ng grievance
@@ -45,12 +70,14 @@ public class Grievance {
 
     // para i-display lahat ng info ng grievance
     public void display() {
-        System.out.println("\nGrievance ID: " + grievanceId);
-        System.out.println("Student SR-CODE: " + studentSR);
-        System.out.println("Title: " + title);
-        System.out.println("Category: " + category);
-        System.out.println("Description: " + description);
-        System.out.println("Status: " + status);
-        System.out.println("Feedback: " + feedback);
+        Utility.printCentered("");
+        Utility.printCentered("Grievance ID: " + grievanceId);
+        Utility.printCentered("Student SR-Code: " + studentSR);
+        Utility.printCentered("Title: " + title);
+        Utility.printCentered("Category: " + category);
+        Utility.printCentered("Description: " + description);
+        Utility.printCentered("Status: " + status);
+        Utility.printCentered("Feedback: " + feedback);
+        Utility.printCentered("");
     }
 }

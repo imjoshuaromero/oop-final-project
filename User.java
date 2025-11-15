@@ -25,6 +25,16 @@ public class User {
         return name;
     }
 
+    // allow changing password for users
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    // note (tagalog): gumagamit ang `setPassword` para palitan ang password ng user.
+    // - tinatawag kapag gustong mag-update ang user ng bagong password.
+    // - simple setter lang ito; kung gusto mong mag-hash ng password bago i-save,
+    //   pwede natin idagdag ang hashing dito sa susunod na hakbang.
+
     // common method na magagamit ng lahat ng users
     public void displayInfo() {
         System.out.println("Username: " + username);
