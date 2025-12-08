@@ -25,15 +25,17 @@ public class Utility {
 
     // Print a boxed title with modern box-drawing characters
     public static void printTitle(String title) {
-        int width = Math.min(60, getConsoleWidth() - 10);
+        int consoleWidth = getConsoleWidth();
+        int maxWidth = Math.min(60, consoleWidth - 10);
         int titleLen = title.length();
-        int innerWidth = Math.max(titleLen + 4, width);
+        int innerWidth = Math.max(titleLen + 4, maxWidth);
         
         String topBorder = "═".repeat(innerWidth);
         String bottomBorder = "═".repeat(innerWidth);
-        int padding = (innerWidth - titleLen - 2) / 2;
-        String leftPad = " ".repeat(padding);
-        String rightPad = " ".repeat(innerWidth - titleLen - padding - 2);
+        int leftPadding = (innerWidth - titleLen) / 2;
+        int rightPadding = innerWidth - titleLen - leftPadding;
+        String leftPad = " ".repeat(leftPadding);
+        String rightPad = " ".repeat(rightPadding);
         
         printCentered("╔" + topBorder + "╗");
         printCentered("║" + leftPad + title.toUpperCase() + rightPad + "║");
@@ -149,12 +151,13 @@ public class Utility {
         return cachedWidth;
     }
 
-    // print a vertical menu with each option in a button-like frame, left-aligned
+    // print a vertical menu with each option in a button-like frame, centered
     public static void printMenu(String[] options) {
         int consoleWidth = getConsoleWidth();
-        int menuWidth = 40; // Width of the menu box
-        int leftPadding = (consoleWidth - menuWidth) / 2;
-        String padding = " ".repeat(Math.max(0, leftPadding));
+        int boxWidth = 38; // Fixed width for consistent alignment
+        int contentWidth = boxWidth - 2; // Width between the │ characters
+        int leftPadding = (consoleWidth - boxWidth) / 2;
+        String centerPad = " ".repeat(Math.max(0, leftPadding));
         
         boolean lastWasBlank = false;
         for (String opt : options) {
@@ -168,18 +171,25 @@ public class Utility {
                 // Create button-like frame for each option
                 String content = opt.trim();
                 int contentLen = content.length();
-                int innerWidth = menuWidth - 4; // Account for borders and padding
+                
+                // Calculate left and right padding to center content
+                int totalPadding = contentWidth - contentLen;
+                int leftSpace = totalPadding / 2;
+                int rightSpace = totalPadding - leftSpace;
+                String leftPad = " ".repeat(Math.max(0, leftSpace));
+                String rightPad = " ".repeat(Math.max(0, rightSpace));
+                
+                // Build the middle content line with exact contentWidth
+                String middleLine = leftPad + content + rightPad;
                 
                 // Top border
-                System.out.println(padding + "┌" + "─".repeat(menuWidth - 2) + "┐");
+                System.out.println(centerPad + "┌" + "─".repeat(contentWidth) + "┐");
                 
-                // Content with padding
-                String leftSpace = "  "; // 2 spaces from left border
-                String rightSpace = " ".repeat(Math.max(0, innerWidth - contentLen - leftSpace.length()));
-                System.out.println(padding + "│" + leftSpace + content + rightSpace + " │");
+                // Content with padding - middleLine is exactly contentWidth wide
+                System.out.println(centerPad + "│" + middleLine + "│");
                 
                 // Bottom border
-                System.out.println(padding + "└" + "─".repeat(menuWidth - 2) + "┘");
+                System.out.println(centerPad + "└" + "─".repeat(contentWidth) + "┘");
                 
                 lastWasBlank = false;
             }

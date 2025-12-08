@@ -3,12 +3,14 @@ public class Student extends User {
     // Private fields for encapsulation
     private String srCode;
     private String email;
+    private boolean validated;
 
     // Constructor for creating a new student
     public Student(String srCode, String name, String email, String password) {
         super(srCode, password, name);  // Call parent constructor
         this.srCode = srCode;
         this.email = email;
+        this.validated = false;  // Default: not validated
     }
 
     // Getters for student-specific fields
@@ -18,6 +20,14 @@ public class Student extends User {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
     }
 
     // Implementation of abstract method from User class

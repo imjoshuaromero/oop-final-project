@@ -1,10 +1,11 @@
+/**
+ * Main class - Entry point for SSC Student Welfare System
+ */
 public class Main {
     public static void main(String[] args) {
-        AppData appData = DataManager.loadApplicationData();
-        MenuHandler.runMainMenu(appData.getStudents(), appData.getGrievances());
+        Utility.clearScreen();
+        Utility.loadingScreen();
+        Utility.clearScreen();
+        ApplicationLauncher.start();
     }
 }
-
-//pantayin ang UI sa console
-//ittable ang view concerns
-//iprivate ang ibang fields sa user

@@ -23,6 +23,22 @@ public class Grievance {
         this.grievanceId = nextId++;  // Auto-increment ID
     }
 
+    // Constructor for loading existing grievance from file
+    public Grievance(int grievanceId, String studentSr, String title, String category, 
+                    String description, String status, String feedback) {
+        this.grievanceId = grievanceId;
+        this.studentSr = studentSr;
+        this.title = title;
+        this.category = category;
+        this.description = description;
+        this.status = status;
+        this.feedback = feedback;
+        // Update static counter if needed
+        if (grievanceId >= nextId) {
+            nextId = grievanceId + 1;
+        }
+    }
+
     // Getters for grievance fields
     public int getId() {
         return grievanceId;
@@ -86,7 +102,6 @@ public class Grievance {
         
         // Bottom border
         System.out.println(padding + "╚" + "═".repeat(tableWidth - 2) + "╝");
-        System.out.println();
     }
     
     // Helper method to print a table row with label and value

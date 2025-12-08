@@ -1,9 +1,27 @@
 import java.util.ArrayList;
 
-// MenuHandler: Manages all menu operations and navigation
+/**
+ * MenuHandler: Manages all menu operations and navigation
+ * Uses dependency injection for loose coupling
+ */
 public class MenuHandler {
+    private final IStudentOperations studentOps;
+    private final IAdminOperations adminOps;
+    private final IAuthenticationService authService;
+    private final IDataPersistence dataService;
     
-    public static void runMainMenu(ArrayList<Student> students, ArrayList<Grievance> grievances) {
+    // Constructor injection for interface dependencies
+    public MenuHandler(IStudentOperations studentOps, 
+                      IAdminOperations adminOps,
+                      IAuthenticationService authService,
+                      IDataPersistence dataService) {
+        this.studentOps = studentOps;
+        this.adminOps = adminOps;
+        this.authService = authService;
+        this.dataService = dataService;
+    }
+    
+    public void runMainMenu(ArrayList<Student> students, ArrayList<Grievance> grievances) {
         int choice;
         do {
             Utility.clearScreen();
@@ -23,7 +41,7 @@ public class MenuHandler {
                     studentLogin(students, grievances); 
                     break;
                 case 2: 
-                    StudentService.registerStudent(students); 
+                    studentOps.registerStudent(students); 
                     break;
                 case 3: 
                     adminLogin(students, grievances); 
@@ -39,12 +57,12 @@ public class MenuHandler {
 
     // ========================= STUDENT OPERATIONS =========================
     
-    private static void studentLogin(ArrayList<Student> students, ArrayList<Grievance> grievances) {
+    private void studentLogin(ArrayList<Student> students, ArrayList<Grievance> grievances) {
         String sr = Utility.promptCenteredString("Enter SR Code:").trim();
         String pw = Utility.promptCenteredString("Enter Password:").trim();
         Utility.spinner("Logging In", 800);
 
-        Student loggedIn = AuthService.authenticateStudent(students, sr, pw);
+        Student loggedIn = authService.authenticateStudent(students, sr, pw);
 
         if (loggedIn != null) {
             UIHelper.showLoginSuccess(loggedIn.getName());
@@ -54,7 +72,7 @@ public class MenuHandler {
         }
     }
 
-    private static void studentMenu(Student s, ArrayList<Student> students, ArrayList<Grievance> grievances) {
+    private void studentMenu(Student s, ArrayList<Student> students, ArrayList<Grievance> grievances) {
         int choice;
         do {
             Utility.clearScreen();
@@ -72,10 +90,10 @@ public class MenuHandler {
 
             switch (choice) {
                 case 1:
-                    StudentService.fileConcern(s, grievances);
+                    studentOps.fileConcern(s, grievances);
                     break;
                 case 2:
-                    StudentService.viewMyConcerns(s, grievances);
+                    studentOps.viewStudentConcerns(s, grievances);
                     break;
                 case 3:
                     changePassword(s, students);
@@ -89,25 +107,25 @@ public class MenuHandler {
         } while (choice != 4);
     }
 
-    private static void changePassword(Student s, ArrayList<Student> students) {
+    private void changePassword(Student s, ArrayList<Student> students) {
         String current = Utility.promptCenteredString("Enter Current Password:").trim();
         String newPassword = Utility.promptCenteredString("Enter New Password:").trim();
         String confirmPassword = Utility.promptCenteredString("Confirm New Password:").trim();
         
-        if (AuthService.changePassword(s, current, newPassword, confirmPassword)) {
-            DataManager.saveStudents(students);
+        if (authService.changePassword(s, current, newPassword, confirmPassword)) {
+            dataService.saveStudents(students);
             UIHelper.showSuccess("Password Changed Successfully!");
         }
     }
 
     // ========================= ADMIN OPERATIONS =========================
 
-    private static void adminLogin(ArrayList<Student> students, ArrayList<Grievance> grievances) {
+    private void adminLogin(ArrayList<Student> students, ArrayList<Grievance> grievances) {
         String user = Utility.promptCenteredString("Enter Admin Username:").trim();
         String pass = Utility.promptCenteredString("Enter Password:").trim();
         Utility.spinner("Checking Admin Credentials", 700);
 
-        if (AuthService.authenticateAdmin(user, pass)) {
+        if (authService.authenticateAdmin(user, pass)) {
             UIHelper.showLoginSuccess("Administrator");
             adminMenu(new Admin(), students, grievances);
         } else {
@@ -115,7 +133,7 @@ public class MenuHandler {
         }
     }
 
-    private static void adminMenu(Admin admin, ArrayList<Student> students, ArrayList<Grievance> grievances) {
+    private void adminMenu(Admin admin, ArrayList<Student> students, ArrayList<Grievance> grievances) {
         int choice;
         do {
             Utility.clearScreen();
@@ -135,18 +153,16 @@ public class MenuHandler {
 
             switch (choice) {
                 case 1:
-                    admin.viewAllConcerns(grievances);
+                    adminOps.viewAllConcerns(grievances);
                     break;
                 case 2:
-                    admin.updateConcern(grievances);
-                    DataManager.saveGrievances(grievances);
+                    adminOps.updateConcern(grievances);
                     break;
                 case 3:
-                    admin.deleteConcern(grievances);
-                    DataManager.saveGrievances(grievances);
+                    adminOps.deleteConcern(grievances);
                     break;
                 case 4:
-                    StudentService.validateRegisteredStudents(students);
+                    studentOps.validateRegisteredStudents(students);
                     break;
                 case 5:
                     StudentValidator.reloadRegistry();
@@ -154,7 +170,7 @@ public class MenuHandler {
                     break;
                 case 6:
                     String target = Utility.promptCenteredString("Enter SR-Code to reset password:").trim();
-                    AuthService.resetStudentPassword(students, target);
+                    authService.resetStudentPassword(students, target);
                     break;
                 case 7:
                     Utility.overlaySpinner("Logging Out", 1000);
