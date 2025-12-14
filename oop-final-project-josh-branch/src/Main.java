@@ -1,5 +1,5 @@
 /**
- * Main class - Entry point for SSC Student Welfare System
+ * Main class - Entry point for SSC Student Grievance System
  */
 public class Main {
     public static void main(String[] args) {

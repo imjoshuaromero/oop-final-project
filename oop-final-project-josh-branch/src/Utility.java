@@ -203,49 +203,6 @@ public class Utility {
         return scanner.nextLine();
     }
 
-    // prompt centered and read password with asterisk masking
-    public static String promptCenteredPassword(String prompt) {
-        printCenteredInline(prompt);
-        
-        // Use masking thread to replace visible input with asterisks
-        PasswordMaskingThread maskingThread = new PasswordMaskingThread();
-        Thread thread = new Thread(maskingThread);
-        thread.setDaemon(true);
-        thread.start();
-        
-        String password = scanner.nextLine();
-        
-        maskingThread.stopMasking();
-        
-        return password;
-    }
-    
-    // Helper class for password masking
-    static class PasswordMaskingThread implements Runnable {
-        private volatile boolean stop = false;
-        
-        public void stopMasking() {
-            this.stop = true;
-        }
-        
-        public void run() {
-            int priority = Thread.currentThread().getPriority();
-            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-            
-            try {
-                while (!stop) {
-                    System.out.print("\r" + " ".repeat(80) + "\r*");
-                    System.out.flush();
-                    Thread.sleep(1);
-                }
-            } catch (InterruptedException e) {
-                // Thread interrupted, stop masking
-            } finally {
-                Thread.currentThread().setPriority(priority);
-            }
-        }
-    }
-
     // prompt centered and read an int (returns 0 on invalid input)
     public static int promptCenteredInt(String prompt) {
         // print prompt centered on the same line and read the user's input as a line
