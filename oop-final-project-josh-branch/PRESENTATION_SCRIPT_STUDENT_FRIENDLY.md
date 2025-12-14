@@ -28,28 +28,28 @@ We also made sure our project supports some of the United Nations’ Sustainable
 **Joshua:**
 Let’s show you how the system works!
 
-1. **Student Registration:**
+1. **Student Registration: ZY**
    - If you’re a new student, you can register using your SR Code (student number).
    - You’ll enter your name, email, and password. Don’t worry, your password is safe because it’s hidden using a special code (hashing).
    - After registering, an admin needs to approve your account before you can log in.
 
-2. **Student Login:**
+2. **Student Login: LALA**
    - Once approved, you can log in using your SR Code and password.
    - You’ll see your own dashboard with options.
 
-3. **Filing a Concern:**
+3. **Filing a Concern: ZY**
    - You can file a concern by choosing a category (like Academic, Harassment, Facilities, etc.).
    - You’ll write a title and description of your problem.
    - The system gives your concern a unique ID so you can track it.
 
-4. **Viewing Your Concerns:**
+4. **Viewing Your Concerns: LALA**
    - You can see all the concerns you’ve filed, their status (like Submitted, Under Review, or Resolved), and any feedback from the admin.
    - If you have a lot of concerns, they’re shown 5 at a time so it’s not overwhelming.
 
-5. **Changing Your Password:**
+5. **Changing Your Password: LALA**
    - You can change your password anytime for security.
 
-6. **Admin Side:**
+6. **Admin Side: JOSH**
    - Admins can see all concerns from all students, approve new student accounts, and update the status of concerns.
    - They can also reset passwords if someone gets locked out.
 
@@ -282,3 +282,4 @@ You can also check our code on GitHub: https://github.com/imjoshuaromero/oop-fin
 **End of Script**
 
 *(This script is ready to read as-is for your presentation!)*
+
