@@ -1,22 +1,10 @@
 import java.util.Scanner;
 
-// utility: shared helper methods para iwas-ulit at para mas malinis ang main code.
-// lahat ng methods ay may tagalog comments para madaling maintindihan.
+// Utility class: Shared helper methods for UI and input handling
 public class Utility {
     private static Scanner scanner = new Scanner(System.in);
 
-    // nagpapakita ng simple header/intro (may delay para effect)
-    public static void header() throws InterruptedException {
-        Thread.sleep(500);
-        System.out.println("\t\t\t****************************");
-        Thread.sleep(300);
-        System.out.println("\t\t\t********** Welcome ***********");
-        Thread.sleep(300);
-        System.out.println("\t\t\t****************************");
-        Thread.sleep(300);
-    }
-
-    // linawin ang console screen (gumagawa ng external command depende sa os)
+    // Clear console screen (OS-dependent)
     public static void clearScreen() {
         try {
             String os = System.getProperty("os.name").toLowerCase();
@@ -30,75 +18,28 @@ public class Utility {
         }
     }
 
-    // simpleng loading animation (overlay): ipinapakita ang loading sa iisang linya
-    // at nililinis ang screen para hindi dumami ang output kapag maraming actions
+    // Simple loading animation with spinner
     public static void loadingScreen() {
         overlaySpinner("Loading...", 1200);
     }
 
-    // print a simple boxed title/header to keep menus consistent
+    // Print a boxed title with modern box-drawing characters
     public static void printTitle(String title) {
-        // enhanced double-line box design with better spacing
-        int width = Math.min(60, getConsoleWidth() - 10);
+        int consoleWidth = getConsoleWidth();
+        int maxWidth = Math.min(60, consoleWidth - 10);
         int titleLen = title.length();
-        int innerWidth = Math.max(titleLen + 4, width);
+        int innerWidth = Math.max(titleLen + 4, maxWidth);
         
         String topBorder = "═".repeat(innerWidth);
         String bottomBorder = "═".repeat(innerWidth);
-        int padding = (innerWidth - titleLen - 2) / 2;
-        String leftPad = " ".repeat(padding);
-        String rightPad = " ".repeat(innerWidth - titleLen - padding - 2);
+        int leftPadding = (innerWidth - titleLen) / 2;
+        int rightPadding = innerWidth - titleLen - leftPadding;
+        String leftPad = " ".repeat(leftPadding);
+        String rightPad = " ".repeat(rightPadding);
         
         printCentered("╔" + topBorder + "╗");
         printCentered("║" + leftPad + title.toUpperCase() + rightPad + "║");
         printCentered("╚" + bottomBorder + "╝");
-    }
-
-    // banner-style title with decorative elements (for main welcome screen)
-    public static void printBanner(String title) {
-        int width = Math.min(60, getConsoleWidth() - 10);
-        String stars = "*".repeat(width);
-        String titleLine = String.format("%-" + width + "s", String.format("%" + ((width + title.length()) / 2) + "s", title.toUpperCase()));
-        
-        printCentered("");
-        printCentered(stars);
-        printCentered("*****" + " ".repeat(width - 10) + "*****");
-        printCentered(titleLine);
-        printCentered("*****" + " ".repeat(width - 10) + "*****");
-        printCentered(stars);
-        printCentered("");
-    }
-
-    // gradient-style title with ASCII art effect
-    public static void printFancyTitle(String title) {
-        String line1 = "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓";
-        String line2 = "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░";
-        
-        printCentered("");
-        printCentered(line1);
-        printCentered("▓▓▓▓▓         " + title.toUpperCase() + "         ▓▓▓▓▓");
-        printCentered(line1);
-        printCentered(line2);
-        printCentered("");
-    }
-
-    // simple and clean title with underline
-    public static void printSimpleTitle(String title) {
-        String underline = "─".repeat(title.length() + 4);
-        printCentered("");
-        printCentered("  " + title.toUpperCase() + "  ");
-        printCentered(underline);
-        printCentered("");
-    }
-
-    // wave-style decorative title
-    public static void printWaveTitle(String title) {
-        String wave = "~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~·~";
-        printCentered("");
-        printCentered(wave);
-        printCentered("》》》  " + title.toUpperCase() + "  《《《");
-        printCentered(wave);
-        printCentered("");
     }
 
     // wait for user to press enter (useful after displaying a report)
@@ -210,15 +151,46 @@ public class Utility {
         return cachedWidth;
     }
 
-    // print a vertical menu with each option centered
+    // print a vertical menu with each option in a button-like frame, centered
     public static void printMenu(String[] options) {
+        int consoleWidth = getConsoleWidth();
+        int boxWidth = 38; // Fixed width for consistent alignment
+        int contentWidth = boxWidth - 2; // Width between the │ characters
+        int leftPadding = (consoleWidth - boxWidth) / 2;
+        String centerPad = " ".repeat(Math.max(0, leftPadding));
+        
         boolean lastWasBlank = false;
         for (String opt : options) {
             if (opt == null) opt = "";
             if (opt.trim().isEmpty()) {
-                if (!lastWasBlank) { System.out.println(); lastWasBlank = true; }
+                if (!lastWasBlank) { 
+                    System.out.println(); 
+                    lastWasBlank = true; 
+                }
             } else {
-                printCentered(opt);
+                // Create button-like frame for each option
+                String content = opt.trim();
+                int contentLen = content.length();
+                
+                // Calculate left and right padding to center content
+                int totalPadding = contentWidth - contentLen;
+                int leftSpace = totalPadding / 2;
+                int rightSpace = totalPadding - leftSpace;
+                String leftPad = " ".repeat(Math.max(0, leftSpace));
+                String rightPad = " ".repeat(Math.max(0, rightSpace));
+                
+                // Build the middle content line with exact contentWidth
+                String middleLine = leftPad + content + rightPad;
+                
+                // Top border
+                System.out.println(centerPad + "┌" + "─".repeat(contentWidth) + "┐");
+                
+                // Content with padding - middleLine is exactly contentWidth wide
+                System.out.println(centerPad + "│" + middleLine + "│");
+                
+                // Bottom border
+                System.out.println(centerPad + "└" + "─".repeat(contentWidth) + "┘");
+                
                 lastWasBlank = false;
             }
         }
@@ -272,29 +244,7 @@ public class Utility {
         }
     }
 
-    // scanner helper para sa string input; ipapakita ang prompt at babasahin ang buong linya
-    public static String stringScanner(String input) {
-        System.out.print(input);
-        return scanner.nextLine();
-    }
-
-    // scanner helper para sa integer input; ipapakita ang prompt at babasahin ang integer
-    // nag-poproseso din ng nextLine() para malinis ang buffer
-    public static int intScanner(String input) {
-        System.out.print(input);
-        int value = 0;
-        try {
-            value = scanner.nextInt();
-        } catch (Exception e) {
-            // kung invalid ang input, i-clear ang scanner at ibalik 0
-            scanner.nextLine();
-            return 0;
-        }
-        scanner.nextLine();
-        return value;
-    }
-
-    // isara ang scanner kapag mag-eexit na ang program
+    // Close scanner when program exits
     public static void closeScanner() {
         try {
             scanner.close();

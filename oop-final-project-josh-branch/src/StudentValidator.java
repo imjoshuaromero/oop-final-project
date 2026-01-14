@@ -16,29 +16,44 @@ public class StudentValidator {
         loadFromFile();
     }
 
-    // load sr codes from students.txt (format: sr|name). this is safe to call multiple times.
-    // basahin ang mga sr-code mula sa `students.txt`.
-    // format ng bawat linya: sr|name  o  sr|name|email|password
+    // load sr codes from sr_registry.json (campus registry). this is safe to call multiple times.
+    // basahin ang mga sr-code mula sa `sr_registry.json` (campus student list).
+    // format: JSON array with objects containing "sr" field (e.g., [{"sr": "24-31688"}])
     // pwede itong tawagin muli para i-refresh ang registry habang tumatakbo ang app.
     public static void loadFromFile() {
         VALID_SR_CODES.clear();
-        java.io.File f = new java.io.File("students.json");
+        java.io.File f = new java.io.File("sr_registry.json");
         if (!f.exists()) {
             // no file found — leave registry empty
+            System.out.println("StudentValidator: sr_registry.json not found!");
             return;
         }
 
         try {
             String content = new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8);
-            // find objects like {"sr":"24-12345", "name":"...", "email":"...", "passwordHash":"..."}
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\{\\s*\"sr\"\\s*:\\s*\"(.*?)\"", java.util.regex.Pattern.DOTALL);
-            java.util.regex.Matcher m = p.matcher(content);
-            while (m.find()) {
-                String sr = m.group(1).trim();
-                if (sr.matches("\\d{2}-\\d{5}")) VALID_SR_CODES.add(sr);
+            // Parse JSON array manually
+            content = content.trim();
+            if (content.startsWith("[") && content.endsWith("]")) {
+                content = content.substring(1, content.length() - 1);
+                String[] objects = content.split("},");
+                for (String obj : objects) {
+                    // Extract SR code from JSON object: {"sr": "24-31688"}
+                    int srStart = obj.indexOf("\"sr\"");
+                    if (srStart != -1) {
+                        int colonPos = obj.indexOf(":", srStart);
+                        int quoteStart = obj.indexOf("\"", colonPos);
+                        int quoteEnd = obj.indexOf("\"", quoteStart + 1);
+                        if (quoteStart != -1 && quoteEnd != -1) {
+                            String sr = obj.substring(quoteStart + 1, quoteEnd).trim();
+                            if (sr.matches("\\d{2}-\\d{5}")) {
+                                VALID_SR_CODES.add(sr);
+                            }
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
-            System.out.println("StudentValidator: Error loading students.json: " + e.getMessage());
+            System.out.println("StudentValidator: Error loading sr_registry.json: " + e.getMessage());
         }
     }
 
